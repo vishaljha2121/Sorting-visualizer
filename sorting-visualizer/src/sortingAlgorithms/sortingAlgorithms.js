@@ -1,3 +1,4 @@
+//Animation algorithm for merge sort
 export function mergeSort(array) {
         const animations = [];
         if (array.length <= 1) return array;
@@ -54,4 +55,82 @@ function doMerge(
                 animations.push([k, auxiliaryArray[j]]);
                 mainArray[k++] = auxiliaryArray[j++];
         }
+}
+//Animation algorithm for quick sort
+export function quickSort(array) {
+        const animations = [];
+        //let auxiliaryArray = array.slice(0);
+        //quickSortHelper(array, 0, array.length - 1, animations);
+        quickSortRecursive(array);
+        return array;
+}
+
+function quickSortHelper(
+        array,
+        start,
+        end,
+        animations,
+) {
+        if (start >= end) return;
+
+        let idx = partition(array, start, end, animations);
+        quickSortHelper(array, start, idx - 1, animations);
+        quickSortHelper(array, idx + 1, end, animations);
+}
+
+
+function partition(
+        array,
+        left,
+        right,
+        animations,
+) {
+        var pivot = array[Math.floor((right + left) / 2)],
+        i = left,
+        j = right;
+
+        while (i <= j) {
+                while (array[i] < pivot) {
+                        i++;
+                }
+                while (array[j] > pivot) {
+                        j--;
+                }
+                if (i <= j) {
+                        animations.push([i, j]);
+                        swap(array, i, j);
+                }
+        }
+}
+
+function quickSortRecursive (array) {
+        if (array.length <= 1) return array;
+        else {
+                var leftArr = [],
+                rightArr = [],
+                newArr = [];
+
+                var pivot = array.pop();
+                var length = array.length;
+
+                for (var i = 0; i < length; i++) {
+                        if (array[i] <= pivot) {
+                                leftArr.push(array[i]);
+                        } else {
+                                rightArr.push(array[i]);
+                        }
+                }
+                return newArr.concat(quickSortRecursive(leftArr), pivot, quickSortRecursive(rightArr));
+        }
+}
+
+
+function swap (
+        array,
+        left,
+        right,
+) {
+        let temp = array[left];
+        array[left] = array[right];
+        array[right] = temp;
 }

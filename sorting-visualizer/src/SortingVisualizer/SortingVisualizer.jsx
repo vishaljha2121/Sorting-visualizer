@@ -33,20 +33,39 @@ export default class SortingVisualizer extends React.Component {
                                 const barTwoStyle = arrayBars[barTwoIdx].style;
                                 const color = i % 3 === 0 ? 'red' : 'turquoise';
                                 setTimeout(() => {
-                                        barOneStyle.backgroundColor = 'purple';
-                                        barTwoStyle.backgroundColor = 'purple';
-                                }, i * 2);
+                                        barOneStyle.backgroundColor = color;
+                                        barTwoStyle.backgroundColor = color;
+                                }, i * 1.5);
                         } else {
                                 setTimeout(() => {
                                         const [barOneIdx, newHeight] = animations[i];
                                         const barOneStyle = arrayBars[barOneIdx].style;
                                         barOneStyle.height = `${newHeight}px`;
-                                }, i * 2);
+                                }, i * 3);
                         }
                 }
         }
         quickSort() {
+                const animations = sortingAlgorithms.quickSort(this.state.array);
+                for (let i = 0; i < animations.length; i++) {
+                        const arrayBars = document.getElementsByClassName('array-bar');
+                        //const isColorChange = i % 2 != 1;
 
+                        const [barOneIdx, barTwoIdx] = animations[i];
+                        const barOneStyle = arrayBars[barOneIdx].style;
+                        const barTwoStyle = arrayBars[barTwoIdx].style;
+                        const color = i % 2 === 0 ? 'red' : 'turquoise';
+                        setTimeout(() => {
+                                barOneStyle.backgroundColor = 'purple';
+                                barTwoStyle.backgroundColor = 'purple';
+                        }, i * 3);
+                        setTimeout(() => {
+                                const [barOneIdx, newHeight] = animations[i];
+                                const barOneStyle = arrayBars[barOneIdx].style;
+                                barOneStyle.height = `${newHeight}px`;
+                        }, i * 1.5);
+                        
+                }
         }
         heapSort() {
 
@@ -62,7 +81,7 @@ export default class SortingVisualizer extends React.Component {
                                 array.push(randomIntFromIntervals(-1000, 1000));
                         }
                         const javaScriptSortedArray = array.slice().sort((a, b) => a - b);
-                        const mergeSortedArray = sortingAlgorithms.mergeSort(array.slice());
+                        const mergeSortedArray = sortingAlgorithms.quickSort(array.slice());
                         console.log(arraysAreEqual(javaScriptSortedArray, mergeSortedArray));
                 }
         }
