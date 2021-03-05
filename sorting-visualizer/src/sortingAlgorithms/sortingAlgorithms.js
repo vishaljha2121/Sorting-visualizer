@@ -1,3 +1,12 @@
+import {
+        newTrace,
+        addToTrace,
+        lastSorted,
+        createRange,
+        createKey
+
+} from './helpers';
+
 //Animation algorithm for merge sort
 export function mergeSort(array) {
         const animations = [];
@@ -58,10 +67,10 @@ function doMerge(
 }
 //Animation algorithm for quick sort
 export function quickSort(array) {
-        const animations = [];
+        //const animations = [];
         //let auxiliaryArray = array.slice(0);
         //quickSortHelper(array, 0, array.length - 1, animations);
-        quickSortRecursive(array);
+        quickSortHelper(array);
         return array;
 }
 
@@ -103,6 +112,8 @@ function partition(
         }
 }
 
+//Not useful
+/*
 function quickSortRecursive (array) {
         if (array.length <= 1) return array;
         else {
@@ -123,14 +134,86 @@ function quickSortRecursive (array) {
                 return newArr.concat(quickSortRecursive(leftArr), pivot, quickSortRecursive(rightArr));
         }
 }
-
+*/
 
 function swap (
         array,
         left,
         right,
 ) {
-        let temp = array[left];
+        const temp = array[left];
         array[left] = array[right];
         array[right] = temp;
 }
+
+//HEAP SORT FUNCTION
+export function HeapSort(nums) {
+        let animations = [];
+        const trace = newTrace(nums);
+
+        const left = (i) => 2 * i + 1;
+        const right = (i) => 2 * i + 2;
+        const parent = (i) => Math.floor((i-1)/2);
+
+        const maxHeapify = (array, i, heapSize) => {
+                const lefChild = left(i);
+                const rightChild = right(i);
+
+                addToTrace(trace, array, lastSorted(trace), [i, lefChild]);
+
+                let largest = lefChild < heapSize && array[lefChild] > array[i] ? lefChild : i;
+
+                if (rightChild < heapSize && array[rightChild] > array[largest]) {
+                        largest = rightChild;
+                }
+                if (largest !== i) {
+                        addToTrace(trace, array, lastSorted(trace), [], [i, largest]);
+                        
+                        animations.push([i, largest]);
+                        swap(array, i, largest);
+
+                        addToTrace(trace, array, lastSorted(trace), [], [i, largest]);
+
+                        maxHeapify(array, largest, heapSize);
+                }
+        };
+
+
+        const BuildMaxHeap = (array) => {
+                const start = Math.floor(array.length / 2);
+                const heapSize = array.length;
+
+                for (let i = start; i >= 0; i--) {
+                        maxHeapify(array, i, heapSize);
+                }
+                addToTrace(trace, array, lastSorted(trace), [], [], [],createRange(0, array.length));
+        };
+
+        const heapSort = (array) => {
+                BuildMaxHeap(array);
+                let heapSize = array.length;
+                for (let i = array.length - 1; i > 0; i--) {
+                        addToTrace(trace, array, lastSorted(trace), [], [0, i]);
+
+                        animations.push([0, i]);
+                        swap(array, 0, i);
+                        heapSize -= 1;
+
+                        addToTrace(trace, array, [...lastSorted(trace), i], [], [0 ,i]);
+                        maxHeapify(array, 0, heapSize);
+
+                        addToTrace(trace, array, lastSorted(trace), [], [], [], createRange(0, heapSize));
+                }
+                addToTrace(trace, array, [...lastSorted(trace), 0]);
+        };
+        //Final execution of heapSort
+        heapSort(nums);
+        return animations;
+};
+
+export const HeapSortKey = createKey(
+        'Comparing',
+        'Swapping',
+        null,
+        'Heap Built'
+);
