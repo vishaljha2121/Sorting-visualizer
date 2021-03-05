@@ -67,49 +67,68 @@ function doMerge(
 }
 //Animation algorithm for quick sort
 export function quickSort(array) {
-        //const animations = [];
-        //let auxiliaryArray = array.slice(0);
-        //quickSortHelper(array, 0, array.length - 1, animations);
-        quickSortHelper(array);
-        return array;
+        let animations = [];
+        let auxiliaryArray = array.slice();
+        quickSortHelper(auxiliaryArray, 0, auxiliaryArray.length - 1, animations);
+
+        return [animations, array];
 }
 
 function quickSortHelper(
-        array,
+        auxillaryArray,
         start,
         end,
         animations,
 ) {
-        if (start >= end) return;
-
-        let idx = partition(array, start, end, animations);
-        quickSortHelper(array, start, idx - 1, animations);
-        quickSortHelper(array, idx + 1, end, animations);
+        let pivotIdx;
+        if (start < end) {
+                pivotIdx = partition(auxillaryArray, start, end, animations);
+                quickSortHelper(auxillaryArray, start, pivotIdx - 1, animations);
+                quickSortHelper(auxillaryArray, pivotIdx + 1, end, animations);
+        }
 }
 
 
 function partition(
         array,
-        left,
-        right,
+        start,
+        end,
         animations,
 ) {
-        var pivot = array[Math.floor((right + left) / 2)],
-        i = left,
-        j = right;
+        let pivotIdx = randomIntFromIntervals(start, end);
 
-        while (i <= j) {
-                while (array[i] < pivot) {
-                        i++;
-                }
-                while (array[j] > pivot) {
-                        j--;
-                }
-                if (i <= j) {
-                        animations.push([i, j]);
-                        swap(array, i, j);
+        animations.push(["comparision1", pivotIdx, end]);
+        animations.push(["swap", pivotIdx, array[end]]);
+        animations.push(["swap", end, array[pivotIdx]]);
+        animations.push(["comparision2", pivotIdx, end]);
+        swap(array, pivotIdx, end);
+
+        let lessTailIdx = start;
+
+        for (let i = start; i < end; ++i) {
+                animations.push(["comparision1", i, end]);
+                animations.push(["comparision2", i, end]);
+                if (array[i] <= array[end]) {
+                        animations.push(["comparision1", i, lessTailIdx]);
+                        animations.push(["swap", i, array[lessTailIdx]]);
+                        animations.push(["swap", lessTailIdx, array[i]]);
+                        animations.push(["comparision2", i, lessTailIdx]);
+                        swap(array, i, lessTailIdx);
+                        lessTailIdx++;
                 }
         }
+        animations.push(["comparision1", lessTailIdx, end]);
+        animations.push(["swap", end, array[lessTailIdx]]);
+        animations.push(["swap", lessTailIdx, array[end]]);
+        animations.push(["comparision2", lessTailIdx, end]);
+
+        swap(array, lessTailIdx, end);
+        return lessTailIdx;
+        
+}
+
+function randomIntFromIntervals(min, max) {
+        return Math.floor(Math.random() * (max - min + 1) + min);
 }
 
 //Not useful
@@ -148,8 +167,8 @@ function swap (
 
 //HEAP SORT FUNCTION
 export function HeapSort(nums) {
-        let animations = [];
-        const trace = newTrace(nums);
+        const animations = [];
+        //const trace = newTrace(nums);
 
         const left = (i) => 2 * i + 1;
         const right = (i) => 2 * i + 2;
@@ -158,21 +177,26 @@ export function HeapSort(nums) {
         const maxHeapify = (array, i, heapSize) => {
                 const lefChild = left(i);
                 const rightChild = right(i);
-
-                addToTrace(trace, array, lastSorted(trace), [i, lefChild]);
+                
+                //Visualize : compare
+                //addToTrace(trace, array, lastSorted(trace), [i, lefChild]);
 
                 let largest = lefChild < heapSize && array[lefChild] > array[i] ? lefChild : i;
-
+                
+                //Visualize : compare
+                //addToTrace(trace, array, lastSorted(trace), [largest, rightChild]);
                 if (rightChild < heapSize && array[rightChild] > array[largest]) {
                         largest = rightChild;
                 }
                 if (largest !== i) {
-                        addToTrace(trace, array, lastSorted(trace), [], [i, largest]);
+                        //Visualize : select
+                        //addToTrace(trace, array, lastSorted(trace), [], [i, largest]);
                         
                         animations.push([i, largest]);
                         swap(array, i, largest);
-
-                        addToTrace(trace, array, lastSorted(trace), [], [i, largest]);
+                        
+                        //Visualize : swap
+                        //addToTrace(trace, array, lastSorted(trace), [], [i, largest]);
 
                         maxHeapify(array, largest, heapSize);
                 }
@@ -186,25 +210,32 @@ export function HeapSort(nums) {
                 for (let i = start; i >= 0; i--) {
                         maxHeapify(array, i, heapSize);
                 }
-                addToTrace(trace, array, lastSorted(trace), [], [], [],createRange(0, array.length));
+                //Visualize : mark heap built
+                //addToTrace(trace, array, lastSorted(trace), [], [], [],createRange(0, array.length));
         };
 
         const heapSort = (array) => {
+                //Building a maxHeap
                 BuildMaxHeap(array);
                 let heapSize = array.length;
-                for (let i = array.length - 1; i > 0; i--) {
-                        addToTrace(trace, array, lastSorted(trace), [], [0, i]);
 
+                for (let i = array.length - 1; i > 0; i--) {
+                        //Visualize : select max
+                        //addToTrace(trace, array, lastSorted(trace), [], [0, i]);
+                        
+                        //Node removed
                         animations.push([0, i]);
                         swap(array, 0, i);
                         heapSize -= 1;
 
-                        addToTrace(trace, array, [...lastSorted(trace), i], [], [0 ,i]);
+                        //Visualize : swap
+                        //addToTrace(trace, array, [...lastSorted(trace), i], [], [0 ,i]);
                         maxHeapify(array, 0, heapSize);
 
-                        addToTrace(trace, array, lastSorted(trace), [], [], [], createRange(0, heapSize));
+                        //Visualize : heap created
+                        //addToTrace(trace, array, lastSorted(trace), [], [], [], createRange(0, heapSize));
                 }
-                addToTrace(trace, array, [...lastSorted(trace), 0]);
+                //addToTrace(trace, array, [...lastSorted(trace), 0]);
         };
         //Final execution of heapSort
         heapSort(nums);
@@ -217,3 +248,35 @@ export const HeapSortKey = createKey(
         null,
         'Heap Built'
 );
+
+
+//Bubble Sort 
+export function bubbleSort(array) {
+        const animations = [];
+        let auxillaryArray = array.slice();
+        bubbleSortHelper(auxillaryArray, animations);
+        return [animations, array];
+}
+
+function bubbleSortHelper(
+        auxillaryArray,
+        animations,
+) {
+        const N = auxillaryArray.length;
+        let iters = N - 1;
+        while (iters > 0) {
+                let swapped = false;
+                for (let i = 0; i < iters; ++i) {
+                        animations.push(["comparision1", i, i+1]);
+                        animations.push(["comparision2", i, i+1]);
+                        if (auxillaryArray[i] > auxillaryArray[i+1]) {
+                                swapped = true;
+                                animations.push(["swap", i, auxillaryArray[i + 1]]);
+                                animations.push(["swap", i + 1, auxillaryArray[i]]);
+                                swap(auxillaryArray, i, i + 1);
+                        }
+                }
+                if (swapped == false) break;
+                iters--;
+        }
+}
