@@ -2,7 +2,9 @@
 
 This is a progressive web app built using React and is used to visualize classic algorithms such as merge sort, quick sort and heap sort.
 
-  
+## The website is live
+[![Netlify Status](https://api.netlify.com/api/v1/badges/95df010b-9a6b-4b9c-a1b4-748729ef60a7/deploy-status)](https://app.netlify.com/sites/visualsort-vishal/deploys)
+You can access the web application at : [Sort-algo-visualizer](https://visualsort-vishal.netlify.app)
 
 ## Purpose
 
