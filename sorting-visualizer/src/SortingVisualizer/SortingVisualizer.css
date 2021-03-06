@@ -1,18 +1,80 @@
+#description {
+        position: relative;
+        z-index: 100;
+}
+
+.app {
+        left: 0px;
+}
+
+.array {
+        position: relative;
+        left: 10px;
+        right: 100px;
+        box-shadow: aliceblue;
+}
 .array-container {
+        font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
         position: absolute;
-        left: 100px;
-        bottom: 10px;
+        background-color:black;
+        top: 10%;
+        left: 0px;
+        right: 0px;
+        margin: auto;
+        
 }
 
 .array-bar {
-        width: 2px;
-        background-color: pink;
+        width: 3px;
+        background-image: linear-gradient(yellow, red);
         display: inline-block;
         margin: 0 1px;
 }
 
 .buttons {
-        position: absolute;
+        position: relative;
         bottom: 5px;
-        left: 35%;
+        left: 10px;
+        padding: auto;
+        margin-right: 10px;
+}
+
+.b1 {
+        margin-left: 10px;
+}
+
+table, th, td {
+        border: 3px solid aliceblue;
+        border-collapse: collapse;
+        padding: 9px;
+        border-spacing: 10px;
+        margin-bottom: 10px;
+}
+
+.table {
+        position: fixed;
+        position: sticky;
+        margin-left: auto;
+        margin-right: auto;
+        margin-bottom: 10px;
+}
+
+h3 {
+        letter-spacing: 7px;
+}
+
+footer {
+        font-family: Georgia, 'Times New Roman', Times, serif;
+        display: block;
+        position: bottom;
+        bottom: 0px;
+        text-align: center;
+        padding: 3px;
+        background-color: grey;
+        color: white;
+        white-space: nowrap;
+}
+
+html {
+        overflow:scroll;
 }

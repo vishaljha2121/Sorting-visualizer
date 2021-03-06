@@ -1,12 +1,20 @@
 import React from 'react';
 import * as sortingAlgorithms from '../sortingAlgorithms/sortingAlgorithms';
+import sortingAlgorithmsDescription from '../SortingDescription/sortingDescription';
 import './SortingVisualizer.css'
+import {
+        BubbleSortDesc,
+        QuickSortDesc,
+        MergeSortDesc
+} from '../SortingDescription/desc';
+import * as button from '@material-ui/icons';
 
 
 const PRIMARY_COLOR = 'turquoise';
 const SECONDARY_COLOR = 'red';
-
+const SORTING_SPEED = 2;
 let WINDOW_HEIGHT = window.innerHeight;
+let WINDOW_WIDTH = window.innerWidth;
 
 
 export default class SortingVisualizer extends React.Component {
@@ -23,13 +31,17 @@ export default class SortingVisualizer extends React.Component {
         }
         resetArray() {
                 const array = [];
-                for (let i = 0; i < 340; i++) {
-                        array.push(randomIntFromIntervals(25, WINDOW_HEIGHT - 30));
+                for (let i = 0; i < WINDOW_WIDTH / 6; i++) {
+                        array.push(randomIntFromIntervals(25, WINDOW_HEIGHT - 500));
+                }
+                var elements = document.getElementsByClassName('array-bar');
+                for (var i = 0; i < elements.length; i++) {
+                        elements[i].style.backgroundImage = 'linear-gradient('+ 'yellow' + ', ' + 'red' + ')';
                 }
                 this.setState({array});
         }
 
-        mergeSort() {
+        mergeSort() {              
                 const animations = sortingAlgorithms.mergeSort(this.state.array);
                 for (let i = 0; i < animations.length; i++) {
                         const arrayBars = document.getElementsByClassName('array-bar');
@@ -40,15 +52,17 @@ export default class SortingVisualizer extends React.Component {
                                 const barTwoStyle = arrayBars[barTwoIdx].style;
                                 const color = i % 3 === 0 ? PRIMARY_COLOR : SECONDARY_COLOR;
                                 setTimeout(() => {
+                                        barOneStyle.backgroundImage = 'linear-gradient('+ 'blue' + ', ' + 'purple' + ')';
+                                        barTwoStyle.backgroundImage = 'linear-gradient('+ 'blue' + ', ' + 'purple' + ')';
                                         barOneStyle.backgroundColor = color;
                                         barTwoStyle.backgroundColor = color;
-                                }, i * 1.5);
+                                }, i * SORTING_SPEED);
                         } else {
                                 setTimeout(() => {
                                         const [barOneIdx, newHeight] = animations[i];
                                         const barOneStyle = arrayBars[barOneIdx].style;
                                         barOneStyle.height = `${newHeight}px`;
-                                }, i * 3);
+                                }, i * SORTING_SPEED);
                         }
                 }
         }
@@ -64,9 +78,11 @@ export default class SortingVisualizer extends React.Component {
                                 const barTwoStyle = arrayBars[barTwoIdx].style;
                                 //const color = i % 2 === 0 ? 'red' : 'turquoise';
                                 setTimeout(() => {
+                                        barOneStyle.backgroundImage = 'linear-gradient('+ 'blue' + ', ' + 'purple' + ')';
+                                        barTwoStyle.backgroundImage = 'linear-gradient('+ 'blue' + ', ' + 'purple' + ')';
                                         barOneStyle.backgroundColor = color;
                                         barTwoStyle.backgroundColor = color;
-                                }, i * 3);
+                                }, i * SORTING_SPEED);
                                 
                         }
                         else {
@@ -76,12 +92,13 @@ export default class SortingVisualizer extends React.Component {
                                 const barStyle = arrayBars[barIdx].style;
                                 setTimeout(() => {
                                         barStyle.height = `${newHeight}px`;
-                                }, i * 3);
+                                }, i * SORTING_SPEED);
                         }
                 
                         
                 }
         }
+        /*
         heapSort() {
                 const animations = sortingAlgorithms.HeapSort(this.state.array);
                 //run(trace);
@@ -110,6 +127,7 @@ export default class SortingVisualizer extends React.Component {
 
 
         }
+        */
         bubbleSort() {
                 const [animations, sortedArray] = sortingAlgorithms.bubbleSort(this.state.array);
                 for (let i = 0; i < animations.length; i++) {
@@ -121,9 +139,11 @@ export default class SortingVisualizer extends React.Component {
                                 const barOneStyle = arrayBars[barOneIdx].style;
                                 const barTwoStyle = arrayBars[barTwoIdx].style;
                                 setTimeout(() => {
+                                        barOneStyle.backgroundImage = 'linear-gradient('+ 'blue' + ', ' + 'purple' + ')';
+                                        barTwoStyle.backgroundImage = 'linear-gradient('+ 'blue' + ', ' + 'purple' + ')';
                                         barOneStyle.backgroundColor = color;
                                         barTwoStyle.backgroundColor = color;
-                                }, i * 0.5);
+                                }, i * SORTING_SPEED);
                         }
                         else {
                                 const [swap, barIdx, newHeight] = animations[i];
@@ -131,9 +151,13 @@ export default class SortingVisualizer extends React.Component {
                                 const barStyle = arrayBars[barIdx].style;
                                 setTimeout(() => {
                                         barStyle.height = `${newHeight}px`;
-                                }, i * 0.5);
+                                        //barStyle.backgroundImage = 'linear-gradient('+ 'purple' + ', ' + 'blue' + ')';
+                                }, i * SORTING_SPEED);
                         }
                 }
+                const arrays = document.getElementById('bar');
+                arrays.style.backgroundImage = 'linear-gradient('+ 'green' + ', ' + 'black' + ')';
+
                 
 
         }
@@ -156,19 +180,76 @@ export default class SortingVisualizer extends React.Component {
                 const {array} = this.state;
 
                 return (
+                        <div className = "app">
+                                
                         <div className = "array-container">
+                                <h1>SORTING ALGORITHM VISUALIZER</h1>
+                                <h1/>
+                                <h1/>
+                                <div className = "array">
                                 {array.map((value, idx) => (
                                         <div
-                                                className = "array-bar"
+                                                className = "array-bar" id = 'bar'
                                                 key = {idx}
                                                 style = {{height: `${value}px`}}></div>
                                 ))}
-                                <div className = "buttons">
-                                        <button onClick = {() => this.resetArray()}>Generate New Array</button>
-                                        <button onClick = {() => this.mergeSort()}>Merge Sort</button>
-                                        <button onClick = {() => this.quickSort()}>Quick Sort</button>
-                                        <button onClick = {() => this.bubbleSort()}>Bubble Sort</button>
                                 </div>
+                                <h3></h3>
+                                <div className = "buttons">
+                                        &nbsp;
+                                        <button id = "b1" onClick = {() => this.resetArray()}>Generate New Array</button>
+                                        <h3></h3>
+                                        <button id = "b2" onClick = {() => this.mergeSort()}>Merge Sort</button>
+                                        &nbsp;&nbsp;&nbsp;&nbsp;
+                                        <button id = "b3" onClick = {() => this.quickSort()}>Quick Sort</button>
+                                        &nbsp;&nbsp;&nbsp;
+                                        <button id = "b4" onClick = {() => this.bubbleSort()}>Bubble Sort</button>
+                                        &nbsp;&nbsp;&nbsp;
+                                </div>
+                         
+                                <div className = "SortInfo">
+                        <hr/>
+                        <hr/>
+
+                        <div className = "Body">
+                                <aside className = "Aside">
+                                        <h3>PERFORMANCE CHART</h3>
+                                        <table className = "table">
+                                                <tr>
+                                                        <th>PERFORMANCE CASE</th>
+                                                        <th>MERGE SORT</th>
+                                                        <th>QUICK SORT</th>
+                                                        <th>BUBBLE SORT</th>
+                                                </tr>
+                                                <tr>
+                                                        <td>WORST CASE</td>
+                                                        <td><span>O(<em>n</em>log<em>n</em>)</span></td>
+                                                        <td><span>O(<em>n</em><sup>2</sup>)</span></td>
+                                                        <td><span>O(n<sup>2</sup>)</span></td>
+                                                </tr>
+                                                <tr>
+                                                        <td>AVERAGE CASE</td>
+                                                        <td><span>O(<em>n</em>log<em>n</em>)</span></td>
+                                                        <td><span>O(<em>n</em>log<em>n</em>)</span></td>
+                                                        <td><span>O(n<sup>2</sup>)</span></td>
+                                                </tr>
+                                                <tr>
+                                                        <td>BEST CASE</td>
+                                                        <td><span>O(<em>n</em>log<em>n</em>)</span></td>
+                                                        <td><span>O(<em>n</em>log<em>n</em>)</span></td>
+                                                        <td><span>O(n)</span></td>
+                                                </tr>
+                                        </table>
+
+
+                                </aside>
+                                
+                        </div>
+                                </div>
+                                <footer>
+                        <p>Designed and developed by Vishal Jha</p>
+                        </footer>
+                        </div>
                         </div>
                 );
         }
