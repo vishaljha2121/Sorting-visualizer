@@ -22,3 +22,6 @@ The src folder contains two subdirectories:
 
 ### A screen-shot of the web app 
 ![A screenshot of the app](https://github.com/vishaljha2121/Sorting-visualizer/blob/main/Screenshot%202021-03-06%20at%206.07.33%20PM.png)
+
+## Licence
+Sorting Visualizer is released under the MIT Licence
