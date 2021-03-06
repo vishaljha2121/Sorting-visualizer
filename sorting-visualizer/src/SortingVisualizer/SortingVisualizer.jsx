@@ -12,7 +12,7 @@ import * as button from '@material-ui/icons';
 
 const PRIMARY_COLOR = 'turquoise';
 const SECONDARY_COLOR = 'red';
-const SORTING_SPEED = 2;
+const SORTING_SPEED = 3.5;
 let WINDOW_HEIGHT = window.innerHeight;
 let WINDOW_WIDTH = window.innerWidth;
 
